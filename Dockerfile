@@ -21,6 +21,9 @@ RUN dnf update -y --nodocs && \
     dnf clean all && \
     rm -rf /var/cache/dnf
 
+RUN groupadd ravendb && \
+    useradd -u 1000 -g ravendb ravendb
+
 RUN cd /opt \
     # Unzip the archive
     && dnf install -y tar bzip2 \
@@ -34,7 +37,7 @@ RUN cd /opt \
     && rm -rf /var/cache/dnf
 
 # copy the scripts and RavenDB config
-COPY scripts /opt/RavenDB/
+COPY --chown=ravendb:ravendb scripts /opt/RavenDB/scripts
 COPY settings.json /opt/RavenDB/Server
 
 # Set workdir to the Server directory
@@ -42,8 +45,10 @@ WORKDIR  /opt/RavenDB/Server
 # Create persistent data volume for both data and configuration
 VOLUME /opt/RavenDB/Server/RavenData /opt/RavenDB/config
 
+RUN chown -R ravendb:ravendb /opt/RavenDB/
+RUN dnf install -y libicu
 # Switch to user from the root
-USER 1000
+USER ravendb:ravendb
 CMD [ "/bin/bash", "/opt/RavenDB/scripts/run-raven.sh" ]
 
 HEALTHCHECK --interval=30s --timeout=30s --start-period=60s --retries=3 CMD /opt/RavenDB/scripts/healthcheck.sh
