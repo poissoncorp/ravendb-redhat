@@ -1,0 +1,49 @@
+ARG BASE_REGISTRY=registry.dso.mil
+ARG BASE_IMAGE=ironbank/redhat/ubi/ubi8
+ARG BASE_TAG=latest
+
+FROM redhat/ubi8
+
+# RavenDB environment
+ENV RAVEN_ARGS='' RAVEN_SETTINGS='' RAVEN_Setup_Mode='Initial' RAVEN_DataDir='RavenData' RAVEN_ServerUrl_Tcp='38888' RAVEN_AUTO_INSTALL_CA='true' RAVEN_IN_DOCKER='true'
+
+# Expose http, tcp and monitoring ports
+EXPOSE 8080 38888 161
+
+# Dockerfile version
+ARG RELEASE=1.0.0
+
+COPY RavenDB.tar.bz2 /opt/RavenDB.tar.bz2
+COPY LICENSE /licenses/ravendb
+
+# ensure that all packages are updated at time of build
+RUN dnf update -y --nodocs && \
+    dnf clean all && \
+    rm -rf /var/cache/dnf
+
+RUN cd /opt \
+    # Unzip the archive
+    && dnf install -y tar bzip2 \
+    && tar xjvf /opt/RavenDB.tar.bz2 \
+    && rm /opt/RavenDB.tar.bz2 \
+    && dnf remove -y tar bzip2 \
+    # Remove packages which aren't part of other dependencies
+    && dnf autoremove -y \ 
+    # Remove any cached packages from the system
+    && dnf clean all \
+    && rm -rf /var/cache/dnf
+
+# copy the scripts and RavenDB config
+COPY scripts /opt/RavenDB/
+COPY settings.json /opt/RavenDB/Server
+
+# Set workdir to the Server directory
+WORKDIR  /opt/RavenDB/Server
+# Create persistent data volume for both data and configuration
+VOLUME /opt/RavenDB/Server/RavenData /opt/RavenDB/config
+
+# Switch to user from the root
+USER 1000
+CMD [ "/bin/bash", "/opt/RavenDB/scripts/run-raven.sh" ]
+
+HEALTHCHECK --interval=30s --timeout=30s --start-period=60s --retries=3 CMD /opt/RavenDB/scripts/healthcheck.sh
