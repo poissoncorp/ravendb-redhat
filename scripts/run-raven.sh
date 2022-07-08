@@ -1,12 +1,12 @@
 #!/bin/bash
 COMMAND="./Raven.Server"
-[ -z "$RAVEN_ServerUrl" ] && export RAVEN_ServerUrl="http://$(hostname):8080"
-
-if [ ! -z "$RAVEN_SETTINGS" ]; then
+RAVEN_ServerUrl="http://$(uname -n):8080"
+[ -z "$RAVEN_ServerUrl" ] && export RAVEN_ServerUrl
+if [ -n "$RAVEN_SETTINGS" ]; then
     echo "$RAVEN_SETTINGS" > settings.json
 fi
 
-if [ ! -z "$RAVEN_ARGS" ]; then
+if [ -n "$RAVEN_ARGS" ]; then
 	COMMAND="$COMMAND ${RAVEN_ARGS}"
 fi
 
@@ -23,7 +23,7 @@ unset TERM_KILL_NEEDED
 trap 'handle_term' TERM INT
 
 [ -n "$RAVEN_DATABASE" ] && export RAVEN_Setup_Mode=None
-$COMMAND &
+"$COMMAND" &
 COMMANDPID=$!
 
 [ -n "$RAVEN_DATABASE" ]  && source ./server-utils.sh && create-database
