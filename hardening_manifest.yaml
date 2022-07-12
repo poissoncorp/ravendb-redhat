@@ -1,18 +1,18 @@
 apiVersion: v1
 
 # The repository name in registry1, excluding /ironbank/
-name: "ravendb/ravendb/ravendb1"
+name: "opensource/ravendb/ravendb"
 
 # List of tags to push for the repository in registry1
 # The most specific version should be the first tag and will be shown
 # on ironbank.dso.mil
 tags:
-- "latest"
+- "5.3"
 
 # Build args passed to Dockerfile ARGs
 args:
   BASE_IMAGE: "redhat/ubi/ubi8"
-  BASE_TAG: "8.3"
+  BASE_TAG: "8.6"
 
 # Docker image labels
 labels:
@@ -36,11 +36,11 @@ labels:
   mil.dso.ironbank.product.name: "myproduct/tool1"
 
 resources:
-  - url: "hibernatingrhinos.com/downloads/RavenDB%20for%20Windows%20x64/53016"
+  - url: "https://daily-builds.s3.amazonaws.com/RavenDB-5.3.103-linux-x64.tar.bz2"
     filename: "RavenDB.tar.gz2"
     validation:
       type: "sha256"
-      value: "c3cee4f594934f0298d102cc5a51b4031dcf5d41e1fb29450c32d68143200fc6"
+      value: "79abd0dc6618d3835daadffc2297c8e197baf8936aa36dd665dcae464d1b090e"
 
 maintainers:
 - email: "containers@ravendb.net"

@@ -1,6 +1,6 @@
 ARG BASE_REGISTRY=registry.dso.mil
 ARG BASE_IMAGE=ironbank/redhat/ubi/ubi8
-ARG BASE_TAG=latest
+ARG BASE_TAG=8.6
 
 FROM ${BASE_REGISTRY}/${BASE_IMAGE}:${BASE_TAG}
 
