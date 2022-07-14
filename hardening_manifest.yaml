@@ -33,11 +33,11 @@ labels:
   # This value can be "opensource" or "commercial"
   mil.dso.ironbank.image.type: "opensource"
   # Product the image belongs to for grouping multiple images
-  mil.dso.ironbank.product.name: "myproduct/tool1"
+  mil.dso.ironbank.product.name: "ravendb"
 
 resources:
-  - url: "https://daily-builds.s3.amazonaws.com/RavenDB-5.3.103-linux-x64.tar.bz2"
-    filename: "RavenDB.tar.gz2"
+  - filename: RavenDB.tar.bz2
+    url: "https://daily-builds.s3.amazonaws.com/RavenDB-5.3.103-linux-x64.tar.bz2"
     validation:
       type: "sha256"
       value: "79abd0dc6618d3835daadffc2297c8e197baf8936aa36dd665dcae464d1b090e"

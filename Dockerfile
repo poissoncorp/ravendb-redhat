@@ -13,7 +13,8 @@ EXPOSE 8080 38888 161
 # Dockerfile version
 ARG RELEASE=1.0.0
 
-COPY config/RavenDB.tar.bz2 /opt/RavenDB.tar.bz2
+
+COPY RavenDB.tar.bz2 "/opt/RavenDB.tar.bz2"
 COPY LICENSE /licenses/ravendb
 
 # Ensure that all packages are updated at time of build
@@ -27,6 +28,7 @@ RUN groupadd ravendb && \
 RUN cd /opt \
     # Unzip the archive
     && dnf install -y tar bzip2 \
+    && ls -l  \
     && tar xjvf /opt/RavenDB.tar.bz2 \
     && rm /opt/RavenDB.tar.bz2 \
     && dnf remove -y tar bzip2 \
