@@ -28,7 +28,6 @@ RUN groupadd ravendb && \
 RUN cd /opt \
     # Unzip the archive
     && dnf install -y tar bzip2 \
-    && ls -l  \
     && tar xjvf /opt/RavenDB.tar.bz2 \
     && rm /opt/RavenDB.tar.bz2 \
     && dnf remove -y tar bzip2 \
@@ -44,7 +43,7 @@ COPY config/settings.json /opt/RavenDB/Server
 
 # Set workdir to the Server directory
 WORKDIR  /opt/RavenDB/Server
-RUN chmod -R 770 /opt/RavenDB/Server && \
+RUN chmod -R 770 /opt/RavenDB && \
     chown -R ravendb:ravendb /opt/RavenDB/ 
 
 RUN dnf install -y libicu
