@@ -18,24 +18,22 @@ COPY RavenDB.tar.bz2 "/opt/RavenDB.tar.bz2"
 COPY LICENSE /licenses/ravendb
 
 # Ensure that all packages are updated at time of build
-RUN dnf update -y --nodocs && \
-    dnf clean all && \
-    rm -rf /var/cache/dnf
+RUN dnf update -y --nodocs \
+    && dnf install -y libicu bzip2 \
+    # Remove packages which aren't part of other dependencies
+    && dnf autoremove -y \ 
+    # Remove any cached packages from the system
+    && dnf clean all \
+    && rm -rf /var/cache/dnf
 
 RUN groupadd ravendb && \
     useradd -u 1000 -g ravendb ravendb
 
 RUN cd /opt \
     # Unzip the archive
-    && dnf install -y tar bzip2 \
     && tar xjvf /opt/RavenDB.tar.bz2 \
     && rm /opt/RavenDB.tar.bz2 \
-    && dnf remove -y tar bzip2 \
-    # Remove packages which aren't part of other dependencies
-    && dnf autoremove -y \ 
-    # Remove any cached packages from the system
-    && dnf clean all \
-    && rm -rf /var/cache/dnf
+    && dnf remove -y bzip2 
 
 # Copy the scripts and RavenDB config
 COPY --chown=ravendb:ravendb scripts /opt/RavenDB/scripts
@@ -45,8 +43,6 @@ COPY config/settings.json /opt/RavenDB/Server
 WORKDIR  /opt/RavenDB/Server
 RUN chmod -R 770 /opt/RavenDB && \
     chown -R ravendb:ravendb /opt/RavenDB/ 
-
-RUN dnf install -y libicu
 
 # Switch to user from the root
 USER ravendb:ravendb
