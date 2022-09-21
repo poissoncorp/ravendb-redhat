@@ -4,11 +4,11 @@ RavenDB is a easy, fast and reliable NoSQL Document Database with multi-document
 The image is based on IronBank RedHat UBI 8.6
 
 ### Tags
-- "5.3"
+- "5.4"
 
 ### Documentation
 
-https://ravendb.net/docs/article-page/5.3
+https://ravendb.net/docs/article-page/5.4
 
 ### Configuration
 
