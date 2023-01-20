@@ -37,7 +37,7 @@ labels:
 
 resources:
   - filename: RavenDB.tar.bz2
-    url: "https://daily-builds.s3.amazonaws.com/RavenDB-5.4.2-linux-x64.tar.bz2"
+    url: "https://daily-builds.s3.amazonaws.com/RavenDB-5.4.100-linux-x64.tar.bz2"
     validation:
       type: "sha256"
       value: "bd9003dd6da2238792f3e5e749994de17f13ac8a942aaecc9a220a0ce5d68802"
